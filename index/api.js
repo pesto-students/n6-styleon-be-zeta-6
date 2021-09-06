@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 4080;
 const path = require("path");
 const cors = require("cors");
+const versionRouter = require("../versions/version.router");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -11,6 +12,7 @@ app.use(express.text());
 app.use(cors());
 
 //Redirect to routes
+app.use("/.netlify/functions/api", versionRouter);
 
 
 app.listen(PORT, () => {

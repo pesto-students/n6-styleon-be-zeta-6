@@ -2,7 +2,8 @@ const userRepo = require("../repositories/user.repository");
 const {decodeToken} = require("../utils/firebase/firebase.util")
 const { GET_SUCCESS,GET_FAILED,POST_SUCCESS,POST_FAILED,DELETE_SUCCESS,DELETE_FAILED,UPDATE_FAILED,UPDATE_SUCCESS,
 } = require("../constants/constant");
-
+const {sendWelcomeEmail} = require("../utils/sendGrid/sendGrid");
+ 
 const getUserByID = async (params) => {
     console.log("calledd user service");
     try {
@@ -25,14 +26,15 @@ const saveUser = async (params) => {
             console.log("user present")
             return { status: 1, message: POST_SUCCESS, response: existingUser };
         }else{
+            console.log("params", params)
             const response = await userRepo.saveUser(params);
-            console.log("send welcome email")
+            sendWelcomeEmail(params.email, params.name)
             if (response) {
                 return { status: 1, message: POST_SUCCESS, response };
             } else { 
                 return { status: 0, message: POST_FAILED };
             }
-        }
+        } 
     } catch (err) {
         console.log(err);
     }

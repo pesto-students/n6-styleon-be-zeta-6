@@ -11,15 +11,12 @@ const sendPurchaseEmail = (recepientEmail, recepientName) => {
     const msg = {
         to: recepientEmail,
         from: sendGridKeys.senderEmail,
-        template_id: "d-a9625667d71e47e5a8965bc4273d16c5",
-        subject: "Sending with dynamic email SendGrid is Fun",
-        // text: "and easy to do anywhere, even with Node.js haha",
-        // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+        template_id: "d-f259a0c219f944cc9b508cbe8aae5a21 ",
         personalizations: [
             {
                 to: { email: recepientEmail },
                 dynamic_template_data: {
-                    first_name: recepientName,
+                    user_name: recepientName,
                 },
             },
         ], 
@@ -74,21 +71,47 @@ const sendRescheduledEmail = (recepientEmail, recepientName, orderID) => {
     return response;
 };
 
-const sendOrderCancelledUpdates = (recepientEmail, recepientName, orderID) => {
+const sendOrderCancelledUpdates = (recepientEmail, recepientName) => {
     //Msg Template
     const msg = {
         to: recepientEmail,
         from: sendGridKeys.senderEmail,
-        template_id: "d-a9625667d71e47e5a8965bc4273d16c5",
-        subject: "Sending with dynamic email SendGrid is Fun",
-        // text: "and easy to do anywhere, even with Node.js haha",
-        // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+        template_id: "d-076a3a29c4dc4c44b40bffd0b151c8d4",
         personalizations: [
             {
                 to: { email: recepientEmail },
                 dynamic_template_data: {
-                    first_name: recepientName,
-                    order_id: orderID,
+                    user_name: recepientName,
+                },
+            },
+        ],
+    };
+
+    let response;
+    sgMail
+        .send(msg)
+        .then(res => {
+            console.log("Email sent check now", res);
+            response = res;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    return response;
+};
+
+const sendWelcomeEmail = (recepientEmail, recepientName) => {
+    console.log("sendWelcomeEmail")
+    //Msg Template
+    const msg = {
+        to: recepientEmail,
+        from: sendGridKeys.senderEmail,
+        template_id: "d-dcdb310e209741f7b80c973668982821",
+        personalizations: [
+            {
+                to: { email: recepientEmail },
+                dynamic_template_data: {
+                    user_name: recepientName,
                 },
             },
         ],
@@ -131,6 +154,7 @@ const sendEmail = (recepientEmail, recepientName) => {
 module.exports = {
     sendEmail,
     sendPurchaseEmail,
+    sendWelcomeEmail,
     sendRescheduledEmail,
     sendOrderCancelledUpdates,
 };

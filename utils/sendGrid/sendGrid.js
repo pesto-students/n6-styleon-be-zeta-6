@@ -22,7 +22,7 @@ const sendPurchaseEmail = (recepientEmail, recepientName) => {
                     first_name: recepientName,
                 },
             },
-        ],
+        ], 
     };
 
     let response;
@@ -108,24 +108,13 @@ const sendOrderCancelledUpdates = (recepientEmail, recepientName, orderID) => {
 };
 
 const sendEmail = (recepientEmail, recepientName) => {
-    //Msg Template
     const msg = {
         to: recepientEmail,
         from: sendGridKeys.senderEmail,
-        template_id: "d-a9625667d71e47e5a8965bc4273d16c5",
-        subject: "Sending with dynamic email SendGrid is Fun",
-        // text: "and easy to do anywhere, even with Node.js haha",
-        // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-        personalizations: [
-            {
-                to: { email: recepientEmail },
-                dynamic_template_data: {
-                    first_name: recepientName,
-                },
-            },
-        ],
-    };
-
+        subject: 'Sending with SendGrid is Fun',
+        text: 'and easy to do anywhere, even with Node',
+        html: '<strong>and easy to do anywhere, even with Node</strong>',
+    }
     let response;
     sgMail
         .send(msg)
@@ -140,6 +129,7 @@ const sendEmail = (recepientEmail, recepientName) => {
 };
 
 module.exports = {
+    sendEmail,
     sendPurchaseEmail,
     sendRescheduledEmail,
     sendOrderCancelledUpdates,

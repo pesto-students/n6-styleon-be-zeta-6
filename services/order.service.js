@@ -3,6 +3,7 @@ const productRepo = require("../repositories/product.repository");
 const userRepo = require("../repositories/user.repository");
 const groomingServiceRepo = require("../repositories/groomingServices.repository");
 const cartRepo = require("../repositories/cart.repository")
+const {sendOrderCancelledUpdates} = require("../utils/sendGrid/sendGrid")
 const { GET_SUCCESS, GET_FAILED, POST_SUCCESS, POST_FAILED, DELETE_SUCCESS, DELETE_FAILED,
     UPDATE_SUCCESS,
     UPDATE_FAILED,
@@ -78,11 +79,13 @@ const reschedule = async params => {
 };
 
 const deleteOrderData = async params => {
-    console.log("calledd Salon service");
+    console.log("calledd deleteOrderData service");
+    console.log("params", params);
     try {
-        const response = await orderRepo.deleteOrderData(params);
+        const response = true ;
         console.log("deleteres", response);
         if (response) {
+            sendOrderCancelledUpdates("varunprabhakaran22@gmail.com", "varun", params.order_id)
             return { status: 1, message: DELETE_SUCCESS, data: response };
         } else {
             return { status: 0, message: DELETE_FAILED };
@@ -113,7 +116,7 @@ const mapOrdersWithServicesAndProducts = async orders => {
                 groomingResponse.map(gServices => {
                     if (gServices.service_id === s.service_id) {
                         s.service_name = gServices.name;
-                        s.hero_image = gServices.hero_image;
+                        s.images = gServices.images;
                     }
                 });
             });
@@ -123,7 +126,7 @@ const mapOrdersWithServicesAndProducts = async orders => {
             order.products.map(p => {
                 productResponse.map(prod => {
                     if (prod.product_id === p.product_id) {
-                        p.product_name = prod.product_name;
+                        p.product_name = prod.name;
                         p.images = prod.images;
                     }
                 });

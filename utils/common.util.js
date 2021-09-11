@@ -59,7 +59,42 @@ const destructureIds = async (res, type) => {
 };
 
 
+/*
+    Util Method to create timestamp for service booking calender
+*/
+const createTimeStamp = ()=>{
+    let available_home_slots = {}
+    let initialTime  = 1631212200
+    let oneDayTimeStamp = 86400;
+    let oneHourTimeStamp = 3600;
+    let intervalOneHour
+    //For number of days
+    for(let i=1; i<=45; i++){
+        let obj = {}
+        let timeStamp = initialTime.toString()
+        let particularDaySlots = []
+        //Shop open at 10 AM
+        let nine_AM = oneHourTimeStamp * 9 ;
+        //For particular day available time slots
+        for(let j=3600; j<=36000; j= j+3600){
+            intervalOneHour = initialTime + (nine_AM + j);
+            particularDaySlots.push(intervalOneHour)
+        }
+
+        //shop closed at 7PM and reassign the initialtime to next day's timestamp
+        initialTime = initialTime + oneDayTimeStamp;
+        //Create obj for one day timestamp
+        obj = { [timeStamp]: particularDaySlots };
+
+        //Merge all the days to form one month time span
+        available_home_slots = {...available_home_slots, ...obj}
+    }
+    console.log("available_home_slots", available_home_slots);
+}
+
+
 module.exports ={
     mapReviewWithUsers,
-    destructureIds
+    destructureIds,
+    createTimeStamp
 }
